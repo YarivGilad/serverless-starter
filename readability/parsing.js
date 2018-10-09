@@ -1,6 +1,11 @@
 /* eslint-disable no-useless-escape */
 const syllable = require('syllable');
 
+/**
+ *
+ * @param  {string} text raw text
+ * @returns  {string} cleaned text
+ */
 module.exports.cleanText = (text) => {
 	let cleanedText = text
 		.replace(/<[^>]+>/g, '')
@@ -21,8 +26,23 @@ module.exports.cleanText = (text) => {
 	return cleanedText;
 };
 
+/**
+ *
+ * @param  {string} text
+ * @returns  {int} word count
+ */
 module.exports.countWords = string => (string ? string.split(' ').length : 0);
 
+/**
+ *
+ * @param  {string} text
+ * @returns  {int} sentence count
+ */
 module.exports.countSentences = string => (string ? string.split(/[.!?]+\s/).filter(Boolean).length : 0);
 
+/**
+ *
+ * @param  {string} text
+ * @returns  {int} syllable count
+ */
 module.exports.countsyllables = string => (string ? syllable(string) : 0);

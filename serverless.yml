@@ -56,15 +56,15 @@ provider:
         - logs:CreateSubscriptionFilter
         - logs:PutSubscriptionFilter
       Resource: "arn:aws:logs:${opt:region, self:provider.region}:serverless:log-group:/aws/cognito/*"
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:Query
-    #     - dynamodb:Scan
-    #     - dynamodb:GetItem
-    #     - dynamodb:PutItem
-    #     - dynamodb:UpdateItem
-    #     - dynamodb:DeleteItem
-    #   Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/jobvite-integration-jobs"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/job-scores"
 
 # The `functions` block defines what code to deploy
 functions:
@@ -75,18 +75,35 @@ functions:
          path: /
          method: get
          cors: true
-  # testGet:
-  #   handler: handler.testGet
-  #   events:
-  #    - http:
-  #        path: /testGet/{orgId}
-  #        method: get
-  #        private: true
-  #        cors: true
-  #        request:
-  #          parameters:
-  #            paths:
-  #              orgId: true
+  getEpoch:
+    handler: index.getEpoch
+    timeout: 10 # optional, in seconds, default is 6
+    events:
+     - schedule:
+        name: get-epoch-every-minute
+        description: 'get-epoch-every-minute'
+        rate: rate(1 minute) # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#RateExpressions
+        enable: true
+  fkReadability:
+    handler: index.fkReadability
+    events:
+     - http:
+         path: /flesch-kincaid
+         method: post
+         private: true
+         cors: true
+  saveFkReadabilityScore:
+    handler: index.saveFkReadabilityScore
+    events:
+     - http:
+         path: /save-fkscore/{jobId}
+         method: post
+         private: true
+         cors: true
+         request:
+           parameters:
+             paths:
+               jobId: true
 
 resources:
   Resources:

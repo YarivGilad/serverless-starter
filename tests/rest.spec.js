@@ -1,4 +1,4 @@
-const rest = require('../lib/rest');
+const rest = require('../utils/rest');
 
 describe('rest', () => {
 	it('should call return a response object with success', (done) => {
