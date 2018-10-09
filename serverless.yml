@@ -1,8 +1,15 @@
-# Welcome to serverless. Read the docs
-# https://serverless.com/framework/docs/
-
-# Serverless.yml is the configuration the CLI
-# uses to deploy your code to your provider of choice
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
 
 # The `service` block is the name of the service
 service: serverless-starter
@@ -20,24 +27,28 @@ package:
   - .circleci/**
   - examples/**
 
-# custom:
+custom:
     # serverless-offline:
     #   provider:
     #     environment: ${file(env.yml)}
-  # dynamodb:
-  #   start:
-  #     port: 8080
-  #     inMemory: true
-  #     migrate: true
-  #   migration:
-  #     dir: migrations
+  dynamodb:
+    start:
+      port: 8080
+      inMemory: true
+      migrate: true
+    migration:
+      dir: migrations
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=1.27.3"
 
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
   runtime: nodejs8.10
-  stage: ${opt:stage}
-  region: eu-west-2
+  stage: ${opt:stage} # set the stage based on what Circle Branch is deploying
+  region: eu-west-2 # default is us-east-1 
   # environment: ${file(env.yml)} # for dev - serverless-offline, alternatively pass env vals as options
   # environment:
     # SERVICE_USER: ${opt:service_user} # pass in your environment variables as options from Circle
@@ -109,6 +120,7 @@ functions:
              paths:
                jobId: true
 
+# you can add CloudFormation resource templates here
 resources:
   Resources:
     JobsScoresDynamoDbTable:
