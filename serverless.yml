@@ -8,7 +8,7 @@
 service: serverless-starter
 
 plugins:
-  # - serverless-dynamodb-local
+  - serverless-dynamodb-local
   - serverless-offline-scheduler
   - serverless-offline
 
@@ -84,6 +84,10 @@ functions:
         description: 'get-epoch-every-minute'
         rate: rate(1 minute) # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#RateExpressions
         enable: true
+     - http:
+         path: /get-epoch
+         method: get
+         cors: true
   fkReadability:
     handler: index.fkReadability
     events:
