@@ -39,8 +39,8 @@ provider:
   stage: ${opt:stage}
   region: eu-west-2
   # environment: ${file(env.yml)} # for dev - serverless-offline, alternatively pass env vals as options
-  environment:
-    # SERVICE_USER: ${opt:service_user}
+  # environment:
+    # SERVICE_USER: ${opt:service_user} # pass in your environment variables as options from Circle
     # SERVICE_SEC: ${opt:service_sec}
     # SERVICE_URL: https://app.beapplied.com/api/
   cfLogs: true
