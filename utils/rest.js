@@ -12,7 +12,7 @@
  */
 module.exports.response = (status, data, endpointName) => {
 	if (typeof (status) !== 'number') status = parseInt(status, 10); // eslint-disable-line no-param-reassign
-	const message = `Response for ${endpointName}.\n`;
+	const message = `Response for ${endpointName}.`;
 	const res = {
 		statusCode: status,
 		headers: {

@@ -15,12 +15,12 @@
 service: serverless-starter
 
 plugins:
-  - serverless-dynamodb-local
-  - serverless-offline-scheduler
+  # - serverless-dynamodb-local #  DYNAMODB plugin
+  # - serverless-offline-scheduler # SCHEDULING plugin
   - serverless-offline
 
 
-# exclude the code coverage files and circle ci files
+# exclude the code coverage files, examples and circle ci files
 package:
   exclude:
   - coverage/**
@@ -54,12 +54,12 @@ provider:
     # SERVICE_USER: ${opt:service_user} # pass in your environment variables as options from Circle
     # SERVICE_SEC: ${opt:service_sec}
     # SERVICE_URL: https://app.beapplied.com/api/
-  cfLogs: true
+  cfLogs: true # enable logging
   apiKeys:
     - starter-api-key # https://serverless.com/framework/docs/providers/aws/events/apigateway#setting-api-keys-for-your-rest-api
   iamRoleStatements:
     - Effect: Allow
-      Action:
+      Action: # logging permissions
         - logs:CreateLogGroup
         - logs:CreateLogStream
         - logs:DescribeLogStreams
@@ -67,15 +67,15 @@ provider:
         - logs:CreateSubscriptionFilter
         - logs:PutSubscriptionFilter
       Resource: "arn:aws:logs:${opt:region, self:provider.region}:serverless:log-group:/aws/cognito/*"
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/job-scores"
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Query
+    #     - dynamodb:Scan
+    #     - dynamodb:GetItem
+    #     - dynamodb:PutItem
+    #     - dynamodb:UpdateItem
+    #     - dynamodb:DeleteItem
+    #   Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/job-scores"
 
 # The `functions` block defines what code to deploy
 functions:
@@ -90,11 +90,11 @@ functions:
     handler: index.getEpoch
     timeout: 10 # optional, in seconds, default is 6
     events:
-     - schedule:
-        name: get-epoch-every-minute
-        description: 'get-epoch-every-minute'
-        rate: rate(1 minute) # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#RateExpressions
-        enable: true
+    #  - schedule: # SCHEDULING
+    #     name: get-epoch-every-minute
+    #     description: 'get-epoch-every-minute'
+    #     rate: rate(1 minute) # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#RateExpressions
+    #     enable: true
      - http:
          path: /get-epoch
          method: get
@@ -121,27 +121,27 @@ functions:
                jobId: true
 
 # you can add CloudFormation resource templates here
-resources:
-  Resources:
-    JobsScoresDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: job_id
-            AttributeType: N
-          -
-            AttributeName: score
-            AttributeType: N
-        KeySchema:
-          -
-            AttributeName: job_id
-            KeyType: HASH
-          -
-            AttributeName: score
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 10
-          WriteCapacityUnits: 10
-        TableName: job-scores
+# resources:
+#   Resources:
+#     JobsScoresDynamoDbTable:
+#       Type: 'AWS::DynamoDB::Table'
+#       DeletionPolicy: Retain
+#       Properties:
+#         AttributeDefinitions:
+#           -
+#             AttributeName: job_id
+#             AttributeType: N
+#           -
+#             AttributeName: score
+#             AttributeType: N
+#         KeySchema:
+#           -
+#             AttributeName: job_id
+#             KeyType: HASH
+#           -
+#             AttributeName: score
+#             KeyType: RANGE
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 10
+#           WriteCapacityUnits: 10
+#         TableName: job-scores

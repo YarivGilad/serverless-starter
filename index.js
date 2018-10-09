@@ -15,7 +15,7 @@ module.exports.getEpoch = (event, context, callback) => {
 	console.info('getEpoch');
 	const epoch = Math.round((new Date().getTime() / 1000.0) + 30); // in seconds
 	console.info(`Epoch: ${epoch}`);
-	const response = rest.response(200, { epoch }, '/epoch');
+	const response = rest.response(200, { epoch }, '/get-epoch');
 	callback(null, response);
 };
 
