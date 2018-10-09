@@ -50,7 +50,7 @@ describe('fkReadability', () => {
 			resp = data;
 			done();
 		};
-		epoch(event, context, callback);
+		fkReadability(event, context, callback);
 		expect(resp.statusCode).toBe(200);
 		expect(JSON.parse(resp.body).data).not.toBeNull();
 	});
