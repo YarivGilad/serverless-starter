@@ -1,0 +1,114 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: serverless-starter
+
+plugins:
+  # - serverless-dynamodb-local
+  - serverless-offline-scheduler
+  - serverless-offline
+
+
+# exclude the code coverage files and circle ci files
+package:
+  exclude:
+  - coverage/**
+  - .circleci/**
+  - examples/**
+
+# custom:
+    # serverless-offline:
+    #   provider:
+    #     environment: ${file(env.yml)}
+  # dynamodb:
+  #   start:
+  #     port: 8080
+  #     inMemory: true
+  #     migrate: true
+  #   migration:
+  #     dir: migrations
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage}
+  region: eu-west-2
+  # environment: ${file(env.yml)} # for dev - serverless-offline, alternatively pass env vals as options
+  environment:
+    # SERVICE_USER: ${opt:service_user}
+    # SERVICE_SEC: ${opt:service_sec}
+    # SERVICE_URL: https://app.beapplied.com/api/
+  cfLogs: true
+  apiKeys:
+    - starter-api-key # https://serverless.com/framework/docs/providers/aws/events/apigateway#setting-api-keys-for-your-rest-api
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:DescribeLogStreams
+        - logs:PutLogEvents
+        - logs:CreateSubscriptionFilter
+        - logs:PutSubscriptionFilter
+      Resource: "arn:aws:logs:${opt:region, self:provider.region}:serverless:log-group:/aws/cognito/*"
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Query
+    #     - dynamodb:Scan
+    #     - dynamodb:GetItem
+    #     - dynamodb:PutItem
+    #     - dynamodb:UpdateItem
+    #     - dynamodb:DeleteItem
+    #   Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/jobvite-integration-jobs"
+
+# The `functions` block defines what code to deploy
+functions:
+  hello:
+    handler: index.hello
+    events:
+     - http:
+         path: /
+         method: get
+         cors: true
+  # testGet:
+  #   handler: handler.testGet
+  #   events:
+  #    - http:
+  #        path: /testGet/{orgId}
+  #        method: get
+  #        private: true
+  #        cors: true
+  #        request:
+  #          parameters:
+  #            paths:
+  #              orgId: true
+
+resources:
+  Resources:
+    JobsScoresDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: job_id
+            AttributeType: N
+          -
+            AttributeName: score
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: job_id
+            KeyType: HASH
+          -
+            AttributeName: score
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+        TableName: job-scores
