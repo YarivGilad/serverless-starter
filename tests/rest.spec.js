@@ -9,7 +9,7 @@ describe('rest', () => {
 		expect(res.isBase64Encoded).toBeFalsy();
 		expect(res.statusCode).toBe(200); // response() should handle non-ints
 		expect(body.data).toEqual('test');
-		expect(body.message).toEqual('Response for test.\n');
+		expect(body.message).toEqual('Response for test.');
 		done();
 	});
 

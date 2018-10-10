@@ -14,7 +14,7 @@ test('Clean text should clean a weird string', () => {
 
 test('CountWords should return the correct word count', () => {
 	const input = 'I am awesome at analysis and agreeing with things';
-	expect(readability.countWords(input)).toEqual(13);
+	expect(readability.countWords(input)).toEqual(9);
 });
 
 test('CountWords should return the correct word count even if given null', () => {
@@ -34,7 +34,7 @@ test('CountWords doesn\'t fuck up if given a null value', () => {
 
 test('countsyllables can count syllables', () => {
 	const input = 'I am awesome at analysis and agreeing with things';
-	expect(readability.countsyllables(input)).toEqual(21);
+	expect(readability.countsyllables(input)).toEqual(17);
 });
 
 test('countsyllables doesn\'t fuck up if given a null value', () => {

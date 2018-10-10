@@ -39,7 +39,9 @@ describe('epoch', () => {
 
 describe('fkReadability', () => {
 	const event = {
-		body: 'Test sentence 1234.',
+		body: JSON.stringify({
+			text: 'Test sentence 1234.',
+		}),
 	};
 	const context = {};
 	let resp = {};
