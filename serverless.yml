@@ -15,8 +15,8 @@
 service: serverless-starter
 
 plugins:
-  - serverless-dynamodb-local #  DYNAMODB plugin
-  - serverless-offline-scheduler # SCHEDULING plugin
+  # - serverless-dynamodb-local #  DYNAMODB plugin
+  # - serverless-offline-scheduler # SCHEDULING plugin
   - serverless-offline
 
 
@@ -31,13 +31,13 @@ custom:
     # serverless-offline:
     #   provider:
     #     environment: ${file(env.yml)}
-  dynamodb:
-    start:
-      port: 8080
-      inMemory: true
-      migrate: true
-    migration:
-      dir: migrations
+  # dynamodb:
+  #   start:
+  #     port: 8080
+  #     inMemory: true
+  #     migrate: true
+  #   migration:
+  #     dir: migrations
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -67,15 +67,15 @@ provider:
         - logs:CreateSubscriptionFilter
         - logs:PutSubscriptionFilter
       Resource: "arn:aws:logs:${opt:region, self:provider.region}:serverless:log-group:/aws/cognito/*"
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/job-scores"
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Query
+    #     - dynamodb:Scan
+    #     - dynamodb:GetItem
+    #     - dynamodb:PutItem
+    #     - dynamodb:UpdateItem
+    #     - dynamodb:DeleteItem
+    #   Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/job-scores"
 
 # The `functions` block defines what code to deploy
 functions:
@@ -121,27 +121,27 @@ functions:
                jobId: true
 
 # you can add CloudFormation resource templates here
-resources:
-  Resources:
-    JobsScoresDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: job_id
-            AttributeType: N
-          -
-            AttributeName: score
-            AttributeType: N
-        KeySchema:
-          -
-            AttributeName: job_id
-            KeyType: HASH
-          -
-            AttributeName: score
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 10
-          WriteCapacityUnits: 10
-        TableName: job-scores
+# resources:
+#   Resources:
+#     JobsScoresDynamoDbTable:
+#       Type: 'AWS::DynamoDB::Table'
+#       DeletionPolicy: Retain
+#       Properties:
+#         AttributeDefinitions:
+#           -
+#             AttributeName: job_id
+#             AttributeType: N
+#           -
+#             AttributeName: score
+#             AttributeType: N
+#         KeySchema:
+#           -
+#             AttributeName: job_id
+#             KeyType: HASH
+#           -
+#             AttributeName: score
+#             KeyType: RANGE
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 10
+#           WriteCapacityUnits: 10
+#         TableName: job-scores
