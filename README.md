@@ -56,4 +56,3 @@ Run tests:
 | Scheduling on Serverless | [docs](https://serverless.com/framework/docs/providers/aws/events/schedule/) |
 | API Gateway events config in YAML | [docs](https://serverless.com/framework/docs/providers/aws/events/apigateway/) |
 | Cloudwatch events triggers | [docs](https://serverless.com/framework/docs/providers/aws/events/cloudwatch-event/) |
-| kinesis local | [gh repo](https://github.com/mhart/kinesalite)|
